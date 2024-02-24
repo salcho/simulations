@@ -2,11 +2,9 @@ const gravityClosure = (_ => {
     const parent = document.querySelector('simulation-elem[name="gravity"]');
     const gravityCanvas = parent.shadowRoot.querySelector('canvas');
     const gravityCtx = gravityCanvas.getContext('2d');
-    let hasStarted = false;
 
     function clear() {
         gravityCtx.clearRect(0, 0, gravityCanvas.width, gravityCanvas.height);
-        // make the canvas light grey
         gravityCtx.fillStyle = 'darkkhaki';
         gravityCtx.fillRect(0, 0, gravityCanvas.width, gravityCanvas.height);
     }

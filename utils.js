@@ -60,7 +60,7 @@ function load() {
     document.head.appendChild(script);
 }
 
-function openTab(evt, tabName) {
+function openTab(_, tabName) {
     Array.from(document.getElementsByTagName('simulation-elem'))
         .map(s => s.shadowRoot)
         .map(d => d.querySelector('.tab'))
