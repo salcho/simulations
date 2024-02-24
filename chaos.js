@@ -12,7 +12,7 @@ const chaosClosure = (_ => {
     let debug = false;
 
     // Draw a hexagon in the middle of the canvas
-    function drawHexagon() {
+    function drawHexagon(newRValue = 0) {
         chaosCtx.clearRect(0, 0, chaosCanvas.width, chaosCanvas.height);
         chaosCtx.beginPath();
         const hexagonHeight = Math.sqrt(3) * hexagonSide / 2;
@@ -26,10 +26,16 @@ const chaosClosure = (_ => {
         chaosCtx.strokeStyle = "black";
         chaosCtx.stroke();
         chaosCtx.closePath();
+
+        // draw value of r
+        chaosCtx.font = "20px Arial";
+        chaosCtx.fillStyle = "black";
+        chaosCtx.textAlign = "center";
+        chaosCtx.fillText(`r = ${newRValue || rValue}`, middleX, middleY + hexagonHeight + 20);
     }
 
     drawHexagon();
-    // get vectors of the hexagon's vertices
+    // get vertices of the hexagon's vertices
     let hexagonVertices = [];
     hexagonVertices.push({ x: middleX + hexagonSide, y: middleY });
     hexagonVertices.push({ x: middleX + hexagonSide / 2, y: middleY + hexagonHeight });
@@ -72,7 +78,6 @@ const chaosClosure = (_ => {
         return { x: pointX, y: pointY };
     }
 
-
     function pickRandomVertex() {
         let vertex = hexagonVertices[Math.floor(Math.random() * 6)];
         if (debug) {
@@ -87,7 +92,7 @@ const chaosClosure = (_ => {
         return vertex;
     }
 
-    async function placePointHalfwayBetween(point, vertex) {
+    async function placePointBetween(point, vertex, rValue) {
         let newPoint = {
             x: (1 - rValue) * point.x + rValue * vertex.x,
             y: (1 - rValue) * point.y + rValue * vertex.y
@@ -114,7 +119,7 @@ const chaosClosure = (_ => {
         return newPoint;
     }
 
-    async function iterate(pivot) {
+    async function iterate(pivot, newRValue = 0) {
         // highlight the point
         if (debug) {
             chaosCtx.beginPath();
@@ -127,7 +132,7 @@ const chaosClosure = (_ => {
         if (debug) {
             await new Promise(r => setTimeout(r, 1000));
         }
-        let newPoint = await placePointHalfwayBetween(pivot, vertex);
+        let newPoint = await placePointBetween(pivot, vertex, newRValue || rValue);
         return newPoint;
     }
 
@@ -146,8 +151,7 @@ const chaosClosure = (_ => {
     });
 
     document.getElementById('iterations').addEventListener('input', event => {
-        iterations = parseInt(event.target.value);
-        document.getElementById('iterationsValue').innerText = iterations;
+        iterations = parseInt(event.target.value) * 1000;
     });
 
     document.getElementById('instant').addEventListener('change', event => {
@@ -170,17 +174,25 @@ const chaosClosure = (_ => {
     };
 })();
 
-async function startchaos() {
+async function startchaos(newRValue = 0) {
     // clear the canvas
-    chaosClosure.drawHexagon();
+    chaosClosure.drawHexagon(newRValue);
 
     let point = chaosClosure.pickRandomPoint();
     for (let i = 0; i < chaosClosure.getNumIterations(); i++) {
         chaosClosure.writeIteration(i);
 
-        point = await chaosClosure.iterate(point);
+        point = await chaosClosure.iterate(point, newRValue);
         if (!chaosClosure.getInstant()) {
             await new Promise(r => setTimeout(r, chaosClosure.debug ? 1000 : 1));
         }
+    }
+}
+
+async function sweep() {
+    for (var r = 0; r <= 2; r += 0.01) {
+        startchaos(r);
+
+        await new Promise(r => setTimeout(r, 500));
     }
 }

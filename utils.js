@@ -45,7 +45,7 @@ function load() {
     // sets the first tab as active and hides the rest
     tabs
         .forEach(tab => tab.classList.add("hidden"));
-    const firstTab = tabs[0];
+    const firstTab = tabs[2];
     firstTab.classList.add("active");
     firstTab.classList.remove("hidden");
 

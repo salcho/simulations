@@ -80,11 +80,22 @@
 
             input[type="input"] {
                 width: 100%;
-                height: 25px;
+                height: 35px;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 5px;
                 outline: none;
                 opacity: 0.7;
                 -webkit-transition: .2s;
                 transition: opacity .2s;
+                font-size: 16px;
+                background-color: #f2f2f2;
+                box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+            }
+
+            input[type="input"]:focus {
+                opacity: 1;
+                box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
             }
 
             .controls {
@@ -146,19 +157,24 @@
         </label>
     </simulation-elem>
 
+    <!-- https://en.wikipedia.org/wiki/Chaos_game -->
     <simulation-elem name="chaos">
         <label slot="control">r:
-            <input onchange="this.blur()" type="input" id="r" value="0.5">
+            <input onchange="this.blur()" id="r" value="0.5">
         </label>
-        <label slot="control">Number of iterations:
-            <input onchange="this.blur()" type="range" id="iterations" min="1000" max="100000" step="1" value="10000">
-            <span id="iterationsValue">10000</span>
+        <label slot="control"># of iterations (thousands):
+            <input onchange="this.blur()" id="iterations" value="10">
+            k
         </label>
-        <label slot="control">Instant:
+        <label slot="control">Instant (skip animation):
             <input onchange="this.blur()" type="checkbox" id="instant" unchecked>
         </label>
-        <label slot="control">Debug:
+        <label slot="control">Debug (show point selection):
             <input onchange="this.blur()" type="checkbox" id="debug" unchecked>
+        </label>
+        <label slot="control">
+            Sweep values of r [0, 2]
+            <button type="submit" onclick="sweep(); this.blur()">Sweep</button>
         </label>
     </simulation-elem>
 </body>
