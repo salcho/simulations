@@ -12,12 +12,25 @@ class Simulation extends HTMLElement {
         const container = this.shadowRoot.querySelector("#container");
         container.classList.add(name);
 
+        const functions = [...(this.getAttribute("functions") || "").split(',')]
+            .filter(f => f.length > 0);
+
+        const code = `
+        import { start${name}, reset${name} ${functions.length ? ',' + functions.join(',') : ''} } from './modules/${name}.js';
+        window['start${name}'] = start${name};
+        window['reset${name}'] = reset${name};
+        ${functions.map(f => `window['${f}'] = ${f};`).join('\n')}
+        `;
+        this.shadowRoot.querySelector("#logic").innerText = code;
+
         const startButton = container.querySelector("#start");
         startButton.setAttribute('onclick', `start${name}(); this.blur();`);
+        const resetButton = container.querySelector("#reset");
+        resetButton.setAttribute('onclick', `reset${name}(); this.blur();`);
 
         // move the control elements to the control bar
         const slot = this.shadowRoot.querySelector('slot[name="control"]');
-        const controls = this.shadowRoot.querySelector('#controls');
+        const controls = this.shadowRoot.querySelector('.controls');
         while (slot.assignedElements().length > 0) {
             const child = slot.assignedElements()[0];
             controls.insertBefore(child, controls.lastElementChild);
@@ -25,9 +38,9 @@ class Simulation extends HTMLElement {
     }
 }
 
-customElements.define('simulation-elem', Simulation);
-
 function load() {
+    customElements.define('simulation-elem', Simulation);
+
     // Load the navbar
     const navbar = document.getElementById("navbar");
     const tabs = Array.from(document.getElementsByTagName('simulation-elem'))
@@ -45,19 +58,19 @@ function load() {
     // sets the first tab as active and hides the rest
     tabs
         .forEach(tab => tab.classList.add("hidden"));
-    const firstTab = tabs[2];
+    const firstTab = tabs[0];
     firstTab.classList.add("active");
     firstTab.classList.remove("hidden");
 
-    let script = document.createElement("script");
-    script.src = "./particles.js";
-    document.head.appendChild(script);
-    script = document.createElement("script");
-    script.src = "./gravity.js";
-    document.head.appendChild(script);
-    script = document.createElement("script");
-    script.src = "./chaos.js";
-    document.head.appendChild(script);
+    // let script = document.createElement("script");
+    // script.src = "./particles.js";
+    // document.head.appendChild(script);
+    // script = document.createElement("script");
+    // script.src = "./gravity.js";
+    // document.head.appendChild(script);
+    // script = document.createElement("script");
+    // script.src = "./chaos.js";
+    // document.head.appendChild(script);
 }
 
 function openTab(_, tabName) {
@@ -75,3 +88,6 @@ function openTab(_, tabName) {
     active.classList.remove("hidden");
 }
 
+window.onload = load;
+
+export { load, openTab }
