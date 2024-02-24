@@ -51,13 +51,13 @@ class Particle {
     }
 }
 
-function startParticles() {
+function startparticle() {
     if (particleClosure.hasStarted) {
         return;
     }
     particleClosure.hasStarted = true;
     particleClosure.stop = false;
-    document.getElementById('particleStartButton').disabled = true;
+    particleClosure.parent.shadowRoot.querySelector('#start').disabled = true;
     requestAnimationFrame(particleClosure.mainLoop);
 }
 
@@ -65,13 +65,15 @@ function reset() {
     particleClosure.stop = true;
     gameOver = false;
     currentTime = 0;
-    isGameMode = document.getElementById('gameMode').checked;
-    particleClosure.makeParticles(parseInt(document.getElementById('numberOfParticles').value), isGameMode);
+    const parent = particleClosure.parent;
+    isGameMode = parent.querySelector('#gameMode').checked;
+    particleClosure.makeParticles(parseInt(parent.querySelector('#numberOfParticles').value), isGameMode);
     particleClosure.draw();
 }
 
 const particleClosure = (() => {
-    const particleCanvas = document.getElementById('particle-canvas');
+    const parent = document.querySelector('simulation-elem[name="particle"]');
+    const particleCanvas = parent.shadowRoot.querySelector('canvas');
     const ctx = particleCanvas.getContext('2d');
     // particle radius
     let radius = 30;
@@ -118,7 +120,7 @@ const particleClosure = (() => {
     }
 
     function mainLoop() {
-        if (document.getElementsByClassName('particles')[0].classList.contains('hidden')) {
+        if (parent.shadowRoot.querySelector('.particle').classList.contains('hidden')) {
             return;
         }
 
@@ -274,7 +276,7 @@ const particleClosure = (() => {
     function drawStatus() {
         ctx.font = '30px Arial';
         ctx.fillStyle = 'black';
-        if (document.getElementById('showTime').checked) {
+        if (parent.querySelector('#showTime').checked) {
             ctx.fillText(`Time: ${currentTime}`, 10, particleCanvas.height - 10);
         }
 
@@ -304,49 +306,49 @@ const particleClosure = (() => {
         direction = null;
     });
 
-    document.getElementById('friction').addEventListener('input', event => {
+    parent.querySelector('#friction').addEventListener('input', event => {
         friction = parseFloat(event.target.value);
-        document.getElementById('frictionValue').innerText = friction;
+        parent.querySelector('#frictionValue').innerText = friction;
     });
 
-    document.getElementById('showTime').addEventListener('change', event => {
+    parent.querySelector('#showTime').addEventListener('change', event => {
         draw();
     });
 
-    document.getElementById('particleRadius').addEventListener('input', event => {
+    parent.querySelector('#particleRadius').addEventListener('input', event => {
         stop = true;
         radius = parseInt(event.target.value);
-        document.getElementById('particleRadiusValue').innerText = radius;
+        parent.querySelector('#particleRadiusValue').innerText = radius;
         draw();
         stop = false;
     });
 
-    document.getElementById('numberOfParticles').addEventListener('input', event => {
+    parent.querySelector('#numberOfParticles').addEventListener('input', event => {
         stop = true;
         const numberOfParticles = parseInt(event.target.value);
-        document.getElementById('numberOfParticlesValue').innerText = numberOfParticles;
+        parent.querySelector('#numberOfParticlesValue').innerText = numberOfParticles;
         makeParticles(numberOfParticles, true);
         draw();
         stop = false;
     });
 
-    document.getElementById('mass').addEventListener('input', event => {
+    parent.querySelector('#mass').addEventListener('input', event => {
         stop = true;
         const mass = parseInt(event.target.value);
-        document.getElementById('massValue').innerText = mass;
+        parent.querySelector('#massValue').innerText = mass;
         particles.find(p => p.isUserControlled).mass = mass;
         draw();
         stop = false;
     });
 
-    document.getElementById('gameMode').addEventListener('change', event => {
+    parent.querySelector('#gameMode').addEventListener('change', event => {
         gameMode = event.target.checked;
         reset();
         draw();
     });
 
     // pause/restart the simulation when it is visible
-    const simulation = document.getElementById('particleSimulation');
+    const simulation = parent.shadowRoot.querySelector('#container');
     const observer = new IntersectionObserver((entries) => {
         if (!hasStarted) {
             return;
@@ -373,7 +375,8 @@ const particleClosure = (() => {
         getRadius,
         hasStarted,
         stop,
-        mainLoop
+        mainLoop,
+        parent
     }
 })();
 
