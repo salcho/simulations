@@ -16,12 +16,6 @@
             background-color: #f0f0f0;
         }
 
-        .particle {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         label {
             font-size: 20px;
             margin: 20px;
@@ -147,57 +141,27 @@
         </label>
     </simulation-elem>
 
-    <!-- <simulation-elem name="gravity">
-    </simulation-elem> -->
-    <!-- <div id="particleSimulation" class="tab particles">
-        <div class="simulation">
-            <canvas id="particle-canvas" width="1350" height="820"></canvas>
-            <div>
-                <button id="particleStartButton" type="submit" onclick="startParticles(); this.blur()">Start</button>
-                <button type="submit" onclick="reset(); this.blur()">Reset</button>
-            </div>
-        </div>
-        <div class="controls">
-            <label>Friction:
-                <input onchange="this.blur()" type="range" id="friction" min="0" max="1" step="0.01" value="0.9">
-                <span id="frictionValue">0.9</span>
-            </label>
-            <label>Show time:
-                <input onchange="this.blur()" type="checkbox" id="showTime" checked>
-            </label>
-            <label>Particle radius:
-                <input onchange="this.blur()" type="range" id="particleRadius" min="1" max="100" step="1" value="30">
-                <span id="particleRadiusValue">30</span>
-            </label>
-            <label>Number of particles:
-                <input onchange="this.blur()" type="range" id="numberOfParticles" min="1" max="100" step="1" value="10">
-                <span id="numberOfParticlesValue">10</span>
-            </label>
-            <label>Mass of particle:
-                <input onchange="this.blur()" type="range" id="mass" min="1" max="100" step="1" value="30">
-                <span id="massValue">30</span>
-            </label>
-            <label>Game mode:
-                <input onchange="this.blur()" type="checkbox" id="gameMode" unchecked>
-            </label>
-        </div>
-    </div> -->
+    <simulation-elem name="gravity">
+        <label slot="control">Gravity Coming Soon
+        </label>
+    </simulation-elem>
+
+    <simulation-elem name="chaos">
+        <label slot="control">r:
+            <input onchange="this.blur()" type="input" id="r" value="0.5">
+        </label>
+        <label slot="control">Number of iterations:
+            <input onchange="this.blur()" type="range" id="iterations" min="1000" max="100000" step="1" value="10000">
+            <span id="iterationsValue">10000</span>
+        </label>
+        <label slot="control">Instant:
+            <input onchange="this.blur()" type="checkbox" id="instant" unchecked>
+        </label>
+        <label slot="control">Debug:
+            <input onchange="this.blur()" type="checkbox" id="debug" unchecked>
+        </label>
+    </simulation-elem>
     <!-- 
-    <div class="tab gravity">
-        <div class="simulation">
-            <canvas id="gravity-canvas" width="1350" height="820"></canvas>
-            <div>
-                <button id="gravityStartButton" type="submit" onclick="gravityStart(); this.blur()">Start</button>
-                <button type="submit" onclick="reset(); this.blur()">Reset</button>
-            </div>
-        </div>
-        <div class="controls">
-            <label>
-
-            </label>
-        </div>
-    </div>
-
     <div class="tab chaos">
         <div class="simulation">
             <canvas id="chaos-canvas" width="1350" height="820"></canvas>
@@ -206,20 +170,6 @@
             </div>
         </div>
         <div class="controls">
-            <label>r:
-                <input onchange="this.blur()" type="input" id="r" value="0.5">
-            </label>
-            <label>Number of iterations:
-                <input onchange="this.blur()" type="range" id="iterations" min="1000" max="100000" step="1"
-                    value="10000">
-                <span id="iterationsValue">10000</span>
-            </label>
-            <label>Instant:
-                <input onchange="this.blur()" type="checkbox" id="instant" unchecked>
-            </label>
-            <label>Debug:
-                <input onchange="this.blur()" type="checkbox" id="debug" unchecked>
-            </label>
         </div>
     </div> -->
 </body>

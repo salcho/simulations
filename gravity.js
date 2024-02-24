@@ -1,7 +1,7 @@
-const gravityCanvas = document.getElementById('gravity-canvas');
-const gravityCtx = gravityCanvas.getContext('2d');
-
 const gravityClosure = (_ => {
+    const parent = document.querySelector('simulation-elem[name="gravity"]');
+    const gravityCanvas = parent.shadowRoot.querySelector('canvas');
+    const gravityCtx = gravityCanvas.getContext('2d');
     let hasStarted = false;
 
     function clear() {
@@ -122,18 +122,19 @@ const gravityClosure = (_ => {
         clear,
         planets,
         mainLoop,
+        parent
     };
 })();
 
 gravityClosure.clear();
 gravityClosure.planets.forEach(planet => { planet.draw() });
 
-function gravityStart() {
+function startgravity() {
     if (gravityClosure.hasStarted) {
         return;
     }
     gravityClosure.hasStarted = true;
     gravityClosure.stop = false;
-    document.getElementById('gravityStartButton').disabled = true;
+    gravityClosure.parent.shadowRoot.querySelector('#start').disabled = true;
     requestAnimationFrame(gravityClosure.mainLoop);
 }

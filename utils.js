@@ -52,25 +52,25 @@ function load() {
     let script = document.createElement("script");
     script.src = "./particles.js";
     document.head.appendChild(script);
-    // script.src = "./gravity.js";
-    // document.head.appendChild(script);
-    // script = document.createElement("script");
-    // script.src = "./chaos.js";
-    // document.head.appendChild(script);
-    // script = document.createElement("script");
-
-    // const simulation = document.createElement("simulation-elem");
-    // simulation.setAttribute("name", "Test");
-    // document.body.appendChild(simulation);
+    script = document.createElement("script");
+    script.src = "./gravity.js";
+    document.head.appendChild(script);
+    script = document.createElement("script");
+    script.src = "./chaos.js";
+    document.head.appendChild(script);
 }
 
 function openTab(evt, tabName) {
-    Array.from(document.getElementsByClassName("tab")).forEach(tab => {
-        tab.classList.remove("active");
-        tab.classList.add("hidden");
-    });
+    Array.from(document.getElementsByTagName('simulation-elem'))
+        .map(s => s.shadowRoot)
+        .map(d => d.querySelector('.tab'))
+        .forEach(tab => {
+            tab.classList.remove("active");
+            tab.classList.add("hidden");
+        });
 
-    var active = document.getElementsByClassName(tabName)[0];
+    var active = Array.from(document.getElementsByTagName('simulation-elem'))
+        .map(s => s.shadowRoot).find(s => s.querySelector(`.${tabName}`)).querySelector(`#container`);
     active.classList.add("active");
     active.classList.remove("hidden");
 }

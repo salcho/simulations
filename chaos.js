@@ -1,6 +1,6 @@
 const chaosClosure = (_ => {
-    // Get the canvas 2D context
-    const chaosCanvas = document.getElementById('chaos-canvas');
+    const parent = document.querySelector('simulation-elem[name="chaos"]');
+    const chaosCanvas = parent.shadowRoot.querySelector('canvas');
     const chaosCtx = chaosCanvas.getContext('2d');
     const middleX = chaosCanvas.width / 2;
     const middleY = chaosCanvas.height / 2;
@@ -170,7 +170,7 @@ const chaosClosure = (_ => {
     };
 })();
 
-async function chaosStart() {
+async function startchaos() {
     // clear the canvas
     chaosClosure.drawHexagon();
 
