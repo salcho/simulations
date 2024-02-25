@@ -1,5 +1,6 @@
-const parent = document.querySelector('simulation-elem[name="gravity"]');
-const canvas = parent.shadowRoot.querySelector('canvas');
+import { getShadowRoot } from "../main.js";
+
+const canvas = getShadowRoot('gravity').querySelector('canvas');
 const ctx = canvas.getContext('2d');
 let hasStarted = false;
 
@@ -122,7 +123,7 @@ function startgravity() {
     }
     hasStarted = true;
     stop = false;
-    parent.shadowRoot.querySelector('#start').disabled = true;
+    shadowRoot.querySelector('#start').disabled = true;
     requestAnimationFrame(mainLoop);
 }
 

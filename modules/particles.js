@@ -1,8 +1,10 @@
+import { Point, getShadowRoot } from '../main.js';
+
 class Particle {
-    constructor(isUserControlled = false, color, x, y, vx = 0, vy = 0, isTainted = false) {
-        this.position = { x: x, y: y };
+    constructor(isUserControlled = false, color, position, velocity, isTainted = false) {
+        this.position = position;
         // all particles start with at rest
-        this.velocity = { x: vx, y: vy };
+        this.velocity = velocity;
         this.mass = 1;
         this.color = color;
         this.isUserControlled = isUserControlled;
@@ -89,7 +91,7 @@ const Direction = {
 }
 let direction = null;
 
-const shadowRoot = document.querySelector('simulation-elem[name="particles"]').shadowRoot;
+const shadowRoot = getShadowRoot('particles');
 const canvas = shadowRoot.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
@@ -261,14 +263,19 @@ function makeParticles(numberOfParticles, randomVelocity = false) {
         particles.push(new Particle(
             isFirstParticle,
             isFirstParticle ? 'red' : isBlocker ? 'black' : 'green',
-            isFirstParticle ? 60 : Math.random() * canvas.width,
-            isFirstParticle ? 30 : Math.random() * canvas.height,
-            randomVelocity ? Math.random() * 50 : 0,
-            randomVelocity ? Math.random() * 50 : 0));
+            new Point(
+                isFirstParticle ? 60 : Math.random() * canvas.width,
+                isFirstParticle ? 30 : Math.random() * canvas.height
+            ),
+            new Point(
+                randomVelocity ? Math.random() * 50 : 0,
+                randomVelocity ? Math.random() * 50 : 0)));
     }
 
     if (gameMode) {
-        particles.push(new Particle(false, 'white', canvas.width / 2, canvas.height / 2, Math.random() * 50, Math.random() * 50, true));
+        particles.push(new Particle(false, 'white',
+            new Point(canvas.width / 2, canvas.height / 2),
+            new Point(Math.random() * 50, Math.random() * 50), true));
     }
 }
 

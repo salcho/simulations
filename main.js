@@ -1,3 +1,15 @@
+// Simulation elements use a simple template that creates a self-contained canvas and a bottom and right control bar.
+// Simulations must be given a name and optionally a list of functions that will be bound to the window object.
+// Every simulation must have a corresponding script module in the modules folder that exports a start and reset function
+// with the same name as the simulation. The scripts are loaded automatically when the simulation element is rendered.
+// Simulation come with start and reset buttons in the control bar by default.
+// To add controls to the right bar, add children to the simulation element and use the slot element with the name "control".
+// Example:
+//  <simulation-elem name="sound" functions="playNote,stopNote">
+//      <button id="play" slot="control">Play</button>
+//      <label id="stop" slot="control">Stop</label>
+//  </simulation-elem>
+// Binding functions to the window object makes them available to inline scripts in index.html.
 class Simulation extends HTMLElement {
     constructor() {
         super();
@@ -5,7 +17,7 @@ class Simulation extends HTMLElement {
         const shadowRoot = this.attachShadow({ mode: 'open' });
         shadowRoot.appendChild(template.content.cloneNode(true));
     }
-
+    with
     connectedCallback() {
         // propagate the name of the simulation to all needed attributes
         const name = this.getAttribute("name");
@@ -38,6 +50,13 @@ class Simulation extends HTMLElement {
     }
 }
 
+class Point {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
 function load() {
     customElements.define('simulation-elem', Simulation);
 
@@ -56,21 +75,10 @@ function load() {
     });
 
     // sets the first tab as active and hides the rest
-    tabs
-        .forEach(tab => tab.classList.add("hidden"));
-    const firstTab = tabs[0];
+    tabs.forEach(tab => tab.classList.add("hidden"));
+    const firstTab = tabs[3];
     firstTab.classList.add("active");
     firstTab.classList.remove("hidden");
-
-    // let script = document.createElement("script");
-    // script.src = "./particles.js";
-    // document.head.appendChild(script);
-    // script = document.createElement("script");
-    // script.src = "./gravity.js";
-    // document.head.appendChild(script);
-    // script = document.createElement("script");
-    // script.src = "./chaos.js";
-    // document.head.appendChild(script);
 }
 
 function openTab(_, tabName) {
@@ -88,6 +96,10 @@ function openTab(_, tabName) {
     active.classList.remove("hidden");
 }
 
+function getShadowRoot(name) {
+    return document.querySelector(`simulation-elem[name="${name}"]`).shadowRoot;
+}
+
 window.onload = load;
 
-export { load, openTab }
+export { load, openTab, Point, getShadowRoot }

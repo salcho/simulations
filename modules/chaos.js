@@ -1,4 +1,6 @@
-const shadowRoot = document.querySelector('simulation-elem[name="chaos"]').shadowRoot;
+import { Point, getShadowRoot } from '../main.js';
+
+const shadowRoot = getShadowRoot('chaos');
 const chaosCanvas = shadowRoot.querySelector('canvas');
 const chaosCtx = chaosCanvas.getContext('2d');
 const middleX = chaosCanvas.width / 2;
@@ -48,7 +50,7 @@ function pickRandomPoint() {
         pointY = (1 - Math.sqrt(r1)) * triangle.a.y + (Math.sqrt(r1) * (1 - r2)) * triangle.b.y + (Math.sqrt(r1) * r2) * triangle.c.y;
     } while (pointX < middleX - hexagonSide || pointX > middleX + hexagonSide || pointY < middleY - hexagonHeight || pointY > middleY + hexagonHeight);
 
-    return { x: pointX, y: pointY };
+    return new Point(pointX, pointY);
 }
 
 function pickRandomVertex() {
@@ -163,12 +165,12 @@ function resetchaos() {
 
     // get vertices of the hexagon's vertices
     hexagonVertices = [];
-    hexagonVertices.push({ x: middleX + hexagonSide, y: middleY });
-    hexagonVertices.push({ x: middleX + hexagonSide / 2, y: middleY + hexagonHeight });
-    hexagonVertices.push({ x: middleX - hexagonSide / 2, y: middleY + hexagonHeight });
-    hexagonVertices.push({ x: middleX - hexagonSide, y: middleY });
-    hexagonVertices.push({ x: middleX - hexagonSide / 2, y: middleY - hexagonHeight });
-    hexagonVertices.push({ x: middleX + hexagonSide / 2, y: middleY - hexagonHeight });
+    hexagonVertices.push(new Point(middleX + hexagonSide, middleY));
+    hexagonVertices.push(new Point(middleX + hexagonSide / 2, middleY + hexagonHeight));
+    hexagonVertices.push(new Point(middleX - hexagonSide / 2, middleY + hexagonHeight));
+    hexagonVertices.push(new Point(middleX - hexagonSide, middleY));
+    hexagonVertices.push(new Point(middleX - hexagonSide / 2, middleY - hexagonHeight));
+    hexagonVertices.push(new Point(middleX + hexagonSide / 2, middleY - hexagonHeight));
     // highlight the vertices
     hexagonVertices.forEach(vertex => {
         chaosCtx.beginPath();
@@ -184,7 +186,7 @@ function resetchaos() {
         triangles.push({
             a: hexagonVertices[i],
             b: hexagonVertices[(i + 1) % 6],
-            c: { x: middleX, y: middleY }
+            c: new Point(middleX, middleY)
         });
     }
 }
